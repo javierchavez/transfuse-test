@@ -4,7 +4,7 @@ import org.androidtransfuse.annotations.*;
 import android.content.res.Configuration;
 
 
-@Application(label = "@string/app_name", icon = "@drawable/ic_launcher")
+@Application(label = "@string/app_name", icon = "@mipmap/ic_launcher")
 public class MainApplication {
     private boolean onCreate;
     private boolean onLowMemory;
