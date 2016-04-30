@@ -1,6 +1,17 @@
 # Reproducing errors
+I just tried these myself. 
 
+I ran:
 
+```bash
+./gradlew build
+```
+
+Make sure you clean after every change since the manifest are not really in sync.
+
+```bash
+./gradlew clean
+```
 
 ### General Manifest
 
@@ -9,7 +20,7 @@
 You will see multiple application tags, resulting in a non runnable, but installable application.
 
 ```xml
-Manifest.xml
+<!-- file: AndroidManifest.xml -->
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -28,7 +39,7 @@ Manifest.xml
 
 
 ```gradle
-// gradle.build
+// file: gradle.build
 android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         output.processResources.manifestFile = file('src/main/AndroidManifest.xml')
@@ -47,14 +58,14 @@ android.applicationVariants.all { variant ->
 Manifest is not changed at the project level so you will need to look in ```build/```
 
 ```xml
-Manifest.xml
+<!-- file: AndroidManifest.xml -->
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 </manifest>
 ```
 
 ```gradle
-gradle.build
+// file: gradle.build
 apt {
     arguments {
         androidManifestFile variant.outputs[0]?.processResources?.manifestFile
@@ -67,6 +78,7 @@ apt {
 We can disable *Manifest Merge* by adding:
 
 ```gradle
+// file: gradle.build
 android.applicationVariants.all { variant ->
     variant.processResources.manifestFile = file('src/main/AndroidManifest.xml')
     variant.processManifest.enabled=false
@@ -76,6 +88,7 @@ android.applicationVariants.all { variant ->
 The caveat is that values in the Gradle build will be ignored. Well, any place-holders defined in gradle and used in manifest will be ignored.
 
 ```gradle
+// file: gradle.build
 defaultConfig {
     applicationId "javier.gradletransfuse"
     minSdkVersion 22
