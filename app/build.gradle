@@ -1,0 +1,80 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+// Not allowing lint to take place
+tasks.whenTaskAdded { task ->
+    if (task.name.equals("lint")) {
+        task.enabled = false
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+repositories {
+    mavenLocal()
+    jcenter()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+        applicationId "javier.gradletransfuse"
+        minSdkVersion 22
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.google.android:android:4.1.1.4'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+
+
+    apt 'org.androidtransfuse:transfuse:0.3.0-beta-9'
+    compile 'org.androidtransfuse:transfuse-api:0.3.0-beta-9'
+}
+
+
+android.applicationVariants.all { variant ->
+    // Here, we could add a check for specific type of variant.
+    variant.outputs.each { output ->
+        output.processResources.manifestFile = file('src/main/AndroidManifest.xml')
+        apt {
+            arguments {
+                androidManifestFile output.processResources.manifestFile
+            }
+        }
+    }
+    // We took the single manifest sent it to transfuse and now it will be handled by
+    // Google Manifest Merger, where it will merge the gradle attributes and the result
+    // will be placed at /build dir.
+    // This is an issue because the manifest at (src/main/AndroidManifest.xml) does not
+    // contain the versionCode, versionName, applicationId, [min|target]SdkVersion.
+}

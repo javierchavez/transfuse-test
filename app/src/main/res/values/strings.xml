@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Gradle Transfuse</string>
+    <string name="hello">Hello.</string>
+</resources>
