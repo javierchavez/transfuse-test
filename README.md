@@ -8,9 +8,8 @@
 
 You will see multiple application tags, resulting in a non runnable, but installable application.
 
-Manifest.xml
-
 ```xml
+Manifest.xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -26,9 +25,10 @@ Manifest.xml
 </manifest>
 ```
 
-gradle.build
+
 
 ```gradle
+// gradle.build
 android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         output.processResources.manifestFile = file('src/main/AndroidManifest.xml')
@@ -47,15 +47,14 @@ android.applicationVariants.all { variant ->
 Manifest is not changed at the project level so you will need to look in ```build/```
 
 ```xml
-# Manifest.xml
+Manifest.xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 </manifest>
 ```
 
-gradle.build
-
 ```gradle
+gradle.build
 apt {
     arguments {
         androidManifestFile variant.outputs[0]?.processResources?.manifestFile
