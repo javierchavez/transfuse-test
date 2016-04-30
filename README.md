@@ -46,9 +46,8 @@ android.applicationVariants.all { variant ->
 
 Manifest is not changed at the project level so you will need to look in ```build/```
 
-Manifest.xml
-
 ```xml
+# Manifest.xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 </manifest>
@@ -66,7 +65,7 @@ apt {
 
 ###### Something to note about.
 
-We can disable Manifest Merge by adding:
+We can disable *Manifest Merge* by adding:
 
 ```gradle
 android.applicationVariants.all { variant ->
@@ -75,7 +74,7 @@ android.applicationVariants.all { variant ->
 }
 ```
 
-The caveat is that values in the Gradle build will be ignored.
+The caveat is that values in the Gradle build will be ignored. Well, any place-holders defined in gradle and used in manifest will be ignored.
 
 ```gradle
 defaultConfig {
