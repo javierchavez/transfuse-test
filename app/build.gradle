@@ -62,19 +62,8 @@ dependencies {
 }
 
 
-android.applicationVariants.all { variant ->
-    // Here, we could add a check for specific type of variant.
-    variant.outputs.each { output ->
-        output.processResources.manifestFile = file('src/main/AndroidManifest.xml')
-        apt {
-            arguments {
-                androidManifestFile output.processResources.manifestFile
-            }
-        }
+apt {
+    arguments {
+        androidManifestFile variant.outputs[0]?.processResources?.manifestFile
     }
-    // We took the single manifest sent it to transfuse and now it will be handled by
-    // Google Manifest Merger, where it will merge the gradle attributes and the result
-    // will be placed at /build dir.
-    // This is an issue because the manifest at (src/main/AndroidManifest.xml) does not
-    // contain the versionCode, versionName, applicationId, [min|target]SdkVersion.
 }
